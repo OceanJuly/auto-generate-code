@@ -12,35 +12,37 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { ListChecks, Loader2Icon } from 'lucide-react';
-import { ICheckProps, ICheckType } from './model';
+import { ICheckType } from './model';
 import { useState } from 'react';
-
-// 检查清单
-const checkList: ICheckProps[] = [
-  {
-    title: 'git',
-  },
-  {
-    title: 'gitlab',
-  },
-];
 
 export default function CheckProcessPassDialog() {
   const [checkStatus, setCheckStatus] = useState<ICheckType>('notCheck');
+  const [checkList, setCheckList] = useState<string[]>([]);
 
   const checkContent = () => {
     switch (checkStatus) {
       case 'notCheck': {
         return <></>;
       }
+      case 'checking':
+      case 'checked': {
+        return checkList.map((checkTxt) => <div key={checkTxt}>{checkTxt}</div>);
+      }
     }
   };
-  const handleCheck = () => {
+  const handleCheck = async () => {
     setCheckStatus('checking');
+    const res = await fetch('https://localhost:3000/api/git');
+    const _res = await res.json();
+    console.log(_res);
+  };
+  const onOpenChange = () => {
+    setCheckStatus('notCheck');
+    setCheckList([]);
   };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={onOpenChange}>
       <form>
         <DialogTrigger asChild>
           <Button variant="outline" className="border-none">

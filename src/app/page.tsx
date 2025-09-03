@@ -3,9 +3,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import styles from './page.module.scss';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import { IGenTargetProps, IGenTargetType } from './page.ts';
+import { IGenTargetProps, IGenTargetType } from './page';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';

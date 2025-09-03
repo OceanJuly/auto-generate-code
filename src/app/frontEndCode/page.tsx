@@ -14,9 +14,13 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import HouseSelect from './components/houseSelect';
 
 export default function FrontEndCode() {
   const FormSchema = z.object({
+    houseUrl: z.string().min(1, {
+      message: '请输入仓库地址',
+    }),
     branchName: z.string().min(1, {
       message: 'please enter branch name',
     }),
@@ -24,26 +28,41 @@ export default function FrontEndCode() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      houseUrl: '',
       branchName: '',
     },
   });
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const { branchName } = data;
-    const res = await fetch('/api/gitOperate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ branchName }),
-    });
-    if (res.ok) {
-      alert('创建分支成功');
-    }
+    console.log(branchName);
+    // const res = await fetch('/api/git', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ branchName }),
+    // });
+    // if (res.ok) {
+    //   alert('创建分支成功');
+    // }
   };
   return (
     <div className={styles['form-wrap']}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="houseUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>仓库地址：</FormLabel>
+                <FormControl>
+                  <HouseSelect {...field} onChangeAction={field.onChange} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="branchName"
@@ -56,7 +75,7 @@ export default function FrontEndCode() {
                 <FormMessage />
               </FormItem>
             )}
-          ></FormField>
+          />
           <Button type="submit">开始执行</Button>
         </form>
       </Form>
